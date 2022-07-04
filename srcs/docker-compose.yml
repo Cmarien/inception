@@ -28,7 +28,7 @@ services:
     ports:
       - "9000:9000"
     volumes:
-      - wp:/var/www/html
+      - wp:/home/inception/public_html
     networks:
       - inception
 
@@ -41,7 +41,7 @@ services:
     ports:
       - "443:443"
     volumes:
-      - wp:/var/www/html
+      - wp:/home/inception/public_html
     networks:
       - inception
 

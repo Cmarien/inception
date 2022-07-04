@@ -2,12 +2,12 @@ FROM debian:buster
 
 RUN apt-get update \
     && apt-get upgrade -y \
-    && apt-get install vim -y \
 	&& apt-get install tar -y \
 	&& apt-get install php-fpm php-mysql -y \
 	&& mkdir -p /run/php/
 
 ADD https://wordpress.org/latest.tar.gz /tmp/latest.tar.gz
+
 RUN cd /tmp && \
 	tar xzvf latest.tar.gz && \
 	rm latest.tar.gz && \

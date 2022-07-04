@@ -8,7 +8,7 @@ RUN	apt-get update && \
 COPY	./tools/cmarien.42.fr.conf /etc/nginx/sites-available/.
 
 RUN	openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 \
-	-subj "/C=BE/ST=Belgium/L=Brussels/O=19/CN=cmarien.42.fr" \
+	-subj "/C=FR/ST=France/L=Paris/O=42/CN=cmarien.42.fr" \
 	-keyout /etc/ssl/private/cmarien.key -out /etc/ssl/certs/cmarien.crt && ln -s /etc/nginx/sites-available/cmarien.42.fr.conf /etc/nginx/sites-enabled/cmarien.42.fr.conf
 
 

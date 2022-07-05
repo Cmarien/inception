@@ -1,12 +1,20 @@
 <?php
 
-define( 'DB_NAME', 'wordpress' );
+define( 'DB_NAME', 'waiting_database' );
 
-define( 'DB_USER', 'cmarien' );
+define( 'DB_USER', 'waiting_username' );
 
-define( 'DB_PASSWORD', 'user42' );
+define( 'DB_PASSWORD', 'waiting_password' );
 
-define( 'DB_HOST', 'mariadb:3306' );
+define( 'DB_HOST', 'waiting_hostname' );
+
+// define( 'DB_NAME', $MYSQL_DATABASE );
+
+// define( 'DB_USER', $MYSQL_USER );
+
+// define( 'DB_PASSWORD', $MYSQL_PASSWORD );
+
+// define( 'DB_HOST', $MYSQL_HOSTNAME );
 
 define( 'DB_CHARSET', 'utf8' );
 

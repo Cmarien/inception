@@ -1,19 +1,60 @@
-LOCAL_VOL = /home/cmarien/data
+BLACK		:= $(shell tput -Txterm setaf 0)
+RED		:= $(shell tput -Txterm setaf 1)
+GREEN		:= $(shell tput -Txterm setaf 2)
+YELLOW		:= $(shell tput -Txterm setaf 3)
+LIGHTPURPLE	:= $(shell tput -Txterm setaf 4)
+PURPLE		:= $(shell tput -Txterm setaf 5)
+BLUE		:= $(shell tput -Txterm setaf 6)
+WHITE		:= $(shell tput -Txterm setaf 7)
+RESET		:= $(shell tput -Txterm sgr0)
 
-all: up
+COMPOSE_FILE=./srcs/docker-compose.yml
 
-up: volumes
-	docker-compose -f srcs/docker-compose.yml up -d --build
+all: run
 
-volumes:
-	grep -q "cmarien.42.fr" /etc/hosts || sudo sed -i '1 i\127.0.0.1	cmarien.42.fr' /etc/hosts
-	[ -d /home/cmarien/data ] || \
-	( sudo mkdir -p /home/cmarien && \
-	sudo cp -rp srcs/requirements/tools/data /home/cmarien/. && \
-	sudo chown -R 82:82 $(LOCAL_VOL)/wp && \
-	sudo chown -R 100:101 $(LOCAL_VOL)/db )
+run: 
+	@echo "$(GREEN)Building files for volumes ... $(RESET)"
+	@sudo mkdir -p /home/cmarien/data/wordpress
+	@sudo mkdir -p /home/cmarien/data/mysql
+	@echo "$(GREEN)Building containers ... $(RESET)"
+	@docker-compose -f $(COMPOSE_FILE) up --build
 
-down:
-	docker-compose -f srcs/docker-compose.yml down
+up:
+	@echo "$(GREEN)Building files for volumes ... $(RESET)"
+	@sudo mkdir -p /home/cmarien/data/wordpress
+	@sudo mkdir -p /home/cmarien/data/mysql
+	@echo "$(GREEN)Building containers in background ... $(RESET)"
+	@docker-compose -f $(COMPOSE_FILE) up -d --build
 
-re: down all
+debug:
+	@echo "$(GREEN)Building files for volumes ... $(RESET)"
+	@sudo mkdir -p /home/cmarien/data/wordpress
+	@sudo mkdir -p /home/cmarien/data/mysql
+	@echo "$(GREEN)Building containers with log information ... $(RESET)"
+	@docker-compose -f $(COMPOSE_FILE) --verbose up
+
+list:	
+	@echo "$(PURPLE)Listing all containers ... $(RESET)"
+	 docker ps -a
+
+list_volumes:
+	@echo "$(PURPLE)Listing volumes ... $(RESET)"
+	docker volume ls
+
+clean: 	
+	@echo "$(RED)Stopping containers ... $(RESET)"
+	@docker-compose -f $(COMPOSE_FILE) down
+	@-docker stop `docker ps -qa`
+	@-docker rm `docker ps -qa`
+	@echo "$(RED)Deleting all images ... $(RESET)"
+	@-docker rmi -f `docker images -qa`
+	@echo "$(RED)Deleting all volumes ... $(RESET)"
+	@-docker volume rm `docker volume ls -q`
+	@echo "$(RED)Deleting all network ... $(RESET)"
+	@-docker network rm `docker network ls -q`
+	@echo "$(RED)Deleting all data ... $(RESET)"
+	@sudo rm -rf /home/cmarien/data/wordpress
+	@sudo rm -rf /home/cmarien/data/mysql
+	@echo "$(RED)Deleting all $(RESET)"
+
+.PHONY: run up debug list list_volumes clean

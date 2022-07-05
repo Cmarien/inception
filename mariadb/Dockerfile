@@ -14,10 +14,10 @@ RUN apt-get update && apt-get -y install mariadb-server mariadb-client \
 
 EXPOSE 3306
 
-COPY ./tools/run.sh /usr/local/bin/
-COPY ./tools/wordpress.sql /usr/local/bin/
-RUN	 chmod +x /usr/local/bin/run.sh
-ENTRYPOINT ["run.sh"]
+COPY ./tools/create_db.sh /usr/local/bin/
+COPY ./conf/wordpress.sql /usr/local/bin/
+RUN  chmod +x /usr/local/bin/create_db.sh
+ENTRYPOINT ["create_db.sh"]
 
 #Command to launch mariadb and enable the database to listen globally
 

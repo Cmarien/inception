@@ -1,64 +1,70 @@
 version: '3.3'
-
 services:
+
   mariadb:
-    image: mariadb
-    build:
-      context: ./requirements/mariadb
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     container_name: mariadb
-    restart: always
-    env_file:
-      - .env
-    ports:
-      - "3306:3306"
+    build: requirements/mariadb
+    image: mariadb
     volumes:
       - db:/var/lib/mysql
     networks:
-      - inception
+      - docker_network
+    ports:
+      - "3306:3306"
+    restart: always
 
   wordpress:
-    image: wordpress
-    depends_on:
-      - mariadb
-    build: requirements/wordpress
+    environment: 
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_HOSTNAME=${MYSQL_HOSTNAME}
     container_name: wordpress
-    restart: always
-    env_file:
-      - .env
+    build: requirements/wordpress
+    image: wordpress
+    depends_on: 
+      - mariadb
+    networks:
+      - docker_network
     ports:
       - "9000:9000"
     volumes:
-      - wp:/var/www/wordpress
-    networks:
-      - inception
+      - wp:/var/www/html/wordpress
+    restart: always
 
   nginx:
-    image: nginx
-    depends_on:
-      - wordpress
-    build: requirements/nginx
     container_name: nginx
-    restart: always
+    build: requirements/nginx
+    image: nginx
+    depends_on :
+      - wordpress
+    networks:
+      - docker_network
     ports:
       - "443:443"
     volumes:
-      - wp:/var/www/wordpress
-    networks:
-      - inception
+      - wp:/var/www/html/wordpress
+    restart: always
+
+networks:
+  docker_network:
 
 volumes:
+  db: 
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/cmarien/data/mysql
+      o: bind
   wp:
     driver: local
     driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: '/home/cmarien/data/wp'
-  db:
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: '/home/cmarien/data/db'
+      type: none
+      device: /home/cmarien/data/wordpress
+      o: bind
 
-networks:
-    inception:

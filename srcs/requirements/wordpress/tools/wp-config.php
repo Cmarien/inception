@@ -2,9 +2,9 @@
 
 define( 'DB_NAME', 'wordpress' );
 
-define( 'DB_USER', MYSQL_USER );
+define( 'DB_USER', 'cmarien' );
 
-define( 'DB_PASSWORD', MYSQL_PASSWORD );
+define( 'DB_PASSWORD', 'user42' );
 
 define( 'DB_HOST', 'mariadb:3306' );
 

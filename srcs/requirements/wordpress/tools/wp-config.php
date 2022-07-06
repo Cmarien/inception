@@ -8,14 +8,6 @@ define( 'DB_PASSWORD', 'waiting_password' );
 
 define( 'DB_HOST', 'waiting_hostname' );
 
-// define( 'DB_NAME', $MYSQL_DATABASE );
-
-// define( 'DB_USER', $MYSQL_USER );
-
-// define( 'DB_PASSWORD', $MYSQL_PASSWORD );
-
-// define( 'DB_HOST', $MYSQL_HOSTNAME );
-
 define( 'DB_CHARSET', 'utf8' );
 
 define( 'DB_COLLATE', '' );

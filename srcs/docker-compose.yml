@@ -13,7 +13,7 @@ services:
     volumes:
       - db:/var/lib/mysql
     networks:
-      - docker_network
+      - inception
     ports:
       - "3306:3306"
     restart: always
@@ -30,7 +30,7 @@ services:
     depends_on: 
       - mariadb
     networks:
-      - docker_network
+      - inception
     ports:
       - "9000:9000"
     volumes:
@@ -44,7 +44,7 @@ services:
     depends_on :
       - wordpress
     networks:
-      - docker_network
+      - inception
     ports:
       - "443:443"
     volumes:
@@ -52,7 +52,7 @@ services:
     restart: always
 
 networks:
-  docker_network:
+  inception:
 
 volumes:
   db: 
